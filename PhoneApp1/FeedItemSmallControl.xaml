@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="PhoneApp1.FeedItemSmallControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="60" d:DesignWidth="480">
+    
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}" Height="48" VerticalAlignment="Top" Margin="0,6,0,6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="32" />
+            <ColumnDefinition Width="64" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Image Height="32" Width="32" Grid.Column="0" Grid.Row="0" x:Name="ImgFavicon" VerticalAlignment="Center" HorizontalAlignment="Center" Tap="ImgFavicon_Tap">
+            <toolkit:ContextMenuService.ContextMenu>
+                <toolkit:ContextMenu>
+                    <toolkit:MenuItem x:Name="markAllAsReadImageMenuItem" Foreground="Black" Header="Mark all as read" Click="markAllAsReadMenuItem"/>
+                    <toolkit:MenuItem x:Name="renameImageMenuItem" Foreground="Black" Header="Rename" Click="renameMenuItem"/>
+                    <toolkit:MenuItem x:Name="unsubscribeImageMenuItem" Foreground="Black" Header="Unsubscribe" Click="unsubscribeMenuItem"/>
+                </toolkit:ContextMenu>
+            </toolkit:ContextMenuService.ContextMenu>
+        </Image>
+        <TextBlock x:Name="TxtUnreadCount" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Verdana" FontSize="28" Tap="FeedItemSmallControl_Tap">
+            <toolkit:ContextMenuService.ContextMenu>
+                <toolkit:ContextMenu>
+                    <toolkit:MenuItem x:Name="markAllAsReadCountMenuItem" Foreground="Black" Header="Mark all as read" Click="markAllAsReadMenuItem"/>
+                    <toolkit:MenuItem x:Name="renameCountMenuItem" Foreground="Black" Header="Rename" Click="renameMenuItem"/>
+                    <toolkit:MenuItem x:Name="unsubscribeCountMenuItem" Foreground="Black" Header="Unsubscribe" Click="unsubscribeMenuItem"/>
+                </toolkit:ContextMenu>
+            </toolkit:ContextMenuService.ContextMenu>
+        </TextBlock>
+        <TextBlock x:Name="TxtFeedname" Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" FontFamily="Verdana" FontSize="28" Tap="FeedItemSmallControl_Tap">
+            <toolkit:ContextMenuService.ContextMenu>
+                <toolkit:ContextMenu>
+                    <toolkit:MenuItem x:Name="markAllAsReadTitleMenuItem" Foreground="Black" Header="Mark all as read" Click="markAllAsReadMenuItem"/>
+                    <toolkit:MenuItem x:Name="renameTitleMenuItem" Foreground="Black" Header="Rename" Click="renameMenuItem"/>
+                    <toolkit:MenuItem x:Name="unsubscribeTitleMenuItem" Foreground="Black" Header="Unsubscribe" Click="unsubscribeMenuItem"/>
+                </toolkit:ContextMenu>
+            </toolkit:ContextMenuService.ContextMenu>
+        </TextBlock>
+    </Grid>
+    
+</UserControl>
