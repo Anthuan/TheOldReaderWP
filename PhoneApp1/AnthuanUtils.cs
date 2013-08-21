@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -12,131 +13,62 @@ namespace PhoneApp1
 {
     class AnthuanUtils
     {
-        public async static void Post(string address, string parameters, Action<string> onResponseGot)
+        public static async void Post(string address, string parameters, Action<string> onResponseGot)
         {
             Uri uri = new Uri(address);
-            HttpWebRequest r = (HttpWebRequest)WebRequest.Create(uri);
-            r.Method = "POST";
-
+            HttpClient client = new HttpClient();
+            
             try
             {
-                r.BeginGetRequestStream(delegate(IAsyncResult req)
-                {
-                    var outStream = r.EndGetRequestStream(req);
+                await client.PostAsync(uri, new StringContent(parameters));
 
-                    using (StreamWriter w = new StreamWriter(outStream))
-                        w.Write(parameters);
-
-                    r.BeginGetResponse(delegate(IAsyncResult result)
-                    {
-                        try
-                        {
-                            HttpWebResponse response = (HttpWebResponse)r.EndGetResponse(result);
-
-                            using (var stream = response.GetResponseStream())
-                            {
-                                using (StreamReader reader = new StreamReader(stream))
-                                {
-                                    onResponseGot(reader.ReadToEnd());
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                            onResponseGot(null);
-                        }
-
-                    }, null);
-
-                }, null);
+                var response = await client.GetStringAsync(uri);
+                onResponseGot(response);
             }
             catch (Exception erm)
             {
                 Console.WriteLine(erm.Message);
+                onResponseGot(null);
             }
         }
 
-        public static void Post(string address, string token, string parameters, Action<string> onResponseGot)
+        public static async void Post(string address, string token, string parameters, Action<string> onResponseGot)
         {
             try
             {
                 Uri uri = new Uri(address);
-                HttpWebRequest r = (HttpWebRequest)WebRequest.Create(uri);
-                r.Method = "POST";
-                r.Headers["Authorization"] = token;
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", token);
 
-                r.BeginGetRequestStream(delegate(IAsyncResult req)
-                {
-                    var outStream = r.EndGetRequestStream(req);
+                await client.PostAsync(uri, new StringContent(parameters));
 
-                    using (StreamWriter w = new StreamWriter(outStream))
-                        w.Write(parameters);
-
-                    r.BeginGetResponse(delegate(IAsyncResult result)
-                    {
-                        try
-                        {
-                            HttpWebResponse response = (HttpWebResponse)r.EndGetResponse(result);
-
-                            using (var stream = response.GetResponseStream())
-                            {
-                                using (StreamReader reader = new StreamReader(stream))
-                                {
-                                    if (onResponseGot != null)
-                                    {
-                                        onResponseGot(reader.ReadToEnd());
-                                    }
-                                    else
-                                    {
-                                        reader.ReadToEnd();
-                                        reader.Close();
-                                    }
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            onResponseGot(null);
-                        }
-
-                    }, null);
-
-                }, null);
+                var response = await client.GetStringAsync(uri);
+                if (onResponseGot != null)
+                    onResponseGot(response);
             }
             catch (Exception erma)
             {
                 Console.WriteLine("foobar");
+                onResponseGot(null);
             }
         }
 
-        public static void Get(string address, string token, Action<string> onResponseGot)
+        public static async void Get(string address, string token, Action<string> onResponseGot)
         {
             Uri uri = new Uri(address);
-            HttpWebRequest r = (HttpWebRequest)WebRequest.Create(uri);
-            r.Method = "GET";
-            r.Headers["Authorization"] = token;
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", token);
 
-            r.BeginGetResponse(delegate(IAsyncResult result)
+            try
             {
-                try
-                {
-                    HttpWebResponse response = (HttpWebResponse)r.EndGetResponse(result);
+                var response = await client.GetStringAsync(uri);
+                onResponseGot(response);
+            }
+            catch
+            {
+                onResponseGot(null);
+            }
 
-                    using (var stream = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            onResponseGot(reader.ReadToEnd());
-                        }
-                    }
-                }
-                catch
-                {
-                    onResponseGot(null);
-                }
-
-            }, null);
         }
 
         public static async Task WriteFile(string fileName, string text)
