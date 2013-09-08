@@ -81,7 +81,7 @@ namespace PhoneApp1
             Dispatcher.BeginInvoke(new AuthenticateHandler(TheOldReader.StaticAuthenticate), Username.Text, Password.Password);
             while (!await AnthuanUtils.FileExists("token"))
             {
-                System.Threading.Thread.Sleep(1000);
+                await Task.Delay(1000);
             }
             NavigationService.GoBack();
         }
